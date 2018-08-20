@@ -66,7 +66,6 @@ module.exports.run = async (bot, message, args) => {
   }
 
   async function getCourseData(body, subject, course, term) {
-    console.log(term);
     let section = course[1];
     for (let i = body.length - 1; i >= 0; i--) {
       // console.log(i);
@@ -85,6 +84,93 @@ module.exports.run = async (bot, message, args) => {
   function getGrades(grades) {
     let grade = Object.keys(grades);
     let number = Object.values(grades);
+    let results = [];
+
+    //LOGIC ERROR
+    if (grade[0] == "A+") {
+      results.push(grade[0]);
+      results.push(number[0]);
+    } else {
+      results.push("A+");
+      results.push("0");
+    }
+    if (grade[1] == "A") {
+      results.push(grade[1]);
+      results.push(number[1]);
+    } else {
+      results.push("A");
+      results.push("0");
+    }
+    if (grade[2] == "A-") {
+      results.push(grade[2]);
+      results.push(number[2]);
+    } else {
+      results.push("A-");
+      results.push("0");
+    }
+    if (grade[3] == "B+") {
+      results.push(grade[3]);
+      results.push(number[3]);
+    } else {
+      results.push("B+");
+      results.push("0");
+    }
+    if (grade[4] == "B") {
+      results.push(grade[4]);
+      results.push(number[4]);
+    } else {
+      results.push("B");
+      results.push("0");
+    }
+    if (grade[5] == "B-") {
+      results.push(grade[5]);
+      results.push(number[5]);
+    } else {
+      results.push("B-");
+      results.push("0");
+    }
+    if (grade[6] == "C+") {
+      results.push(grade[6]);
+      results.push(number[6]);
+    } else {
+      results.push("C+");
+      results.push("0");
+    }
+    if (grade[7] == "C") {
+      results.push(grade[7]);
+      results.push(number[7]);
+    } else {
+      results.push("C");
+      results.push("0");
+    }
+    if (grade[8] == "C-") {
+      results.push(grade[8]);
+      results.push(number[8]);
+    } else {
+      results.push("C-");
+      results.push("0");
+    }
+    if (grade[9] == "D+") {
+      results.push(grade[9]);
+      results.push(number[9]);
+    } else {
+      results.push("D+");
+      results.push("0");
+    }
+    if (grade[10] == "D") {
+      results.push(grade[10]);
+      results.push(number[10]);
+    } else {
+      results.push("D");
+      results.push("0");
+    }
+    if (grade[11] == "D-") {
+      results.push(grade[0]);
+      results.push(number[0]);
+    } else {
+      results.push("A+");
+      results.push("0");
+    }
   }
 
   function checkCourse(course) {
