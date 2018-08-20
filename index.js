@@ -26,7 +26,7 @@ bot.on("ready", async () => {
   console.log(
     `${bot.user.username} is online! Running on ${bot.guilds.size} servers!`
   );
-  let status = [`from my dorm`, `on ResNetWiFi`];
+  let status = [`from my dorm`, `with ResNetWiFi`];
   status_change(status); //Random status displays
 });
 
