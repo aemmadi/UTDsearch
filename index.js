@@ -26,7 +26,7 @@ bot.on("ready", async () => {
   console.log(
     `${bot.user.username} is online! Running on ${bot.guilds.size} servers!`
   );
-  let status = [`from my dorm`, `with ResNetWiFi`];
+  let status = [`from my dorm`, `with ResNetWiFi`, `your grades`, `How to be a bot 101`];
   status_change(status); //Random status displays
 });
 
@@ -48,7 +48,7 @@ bot.on("message", async message => {
 bot.login(config.token);
 
 function status_change(status) {
-  setInterval(function() {
+  setInterval(function () {
     let chosen = status[Math.floor(Math.random() * status.length)];
     bot.user.setActivity(`${chosen}`, { type: "Watching" });
   }, 10000);
