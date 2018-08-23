@@ -3,29 +3,35 @@ const superagent = require("superagent");
 
 // !utd math 2413.004 fall/spring
 module.exports.run = async (bot, message, args) => {
+  //Checks if subject is provided
   if (!args[0])
     return message.channel.send("Specify a subject!\n`!utd <subject> [course] {fall/spring}`\nFor Example: `!utd math 2413.004 fall`");
 
-  let subject = args[0].toUpperCase();
+  let subject = args[0].toUpperCase(); //uppercases the subject for API. math --> MATH
 
+  //Checks if course is provided
   if (!args[1])
     return message.channel.send("Specify a course!\n`!utd <subject> [course] {fall/spring}`\nFor Example: `!utd math 2413.004 fall`");
 
+  //Checks id section is provided
   if (!args[1].includes("."))
     return message.channel.send("Specify course in correct format! Check Example.\n`!utd <subject> [course] {fall/spring}`\nFor Example: `!utd math 2413.004 fall`");
 
   let courseWithSection = args[1];
-  courseWithSection = courseWithSection.split(".");
+  courseWithSection = courseWithSection.split("."); //Splits course number and section
 
-  let course = courseWithSection[0];
-  let section = courseWithSection[1];
-  let convertedSection = sectionConvert(section);
+  let course = courseWithSection[0]; //Course
+  let section = courseWithSection[1]; //Section
 
+  let convertedSection = sectionConvert(section); //Formats the section number for API
+
+  //Checks if term is provided
   if (!args[2])
     return message.channel.send("Specify a term!\n`!utd <subject> [course] {fall/spring}`\nFor Example: `!utd math 2413.004 fall`");
 
-  let term = args[2];
+  let term = args[2]; //Term
 
+  //Capitalizes the first letter in the term for API
   if (term.includes("fall") || term.includes("spring")) {
     if (term.charAt(0) == "f") term = term.replace("f", "F");
     else if (term.charAt(0) == "s") term = term.replace("s", "S");
@@ -34,19 +40,21 @@ module.exports.run = async (bot, message, args) => {
     return message.channel.send("Specify a valid term! Check Example.\n`!utd <subject> [course] {fall/spring}`\nFor Example: `!utd math 2413.004 fall`");
   }
 
-  let data = await getData(subject, course, section, convertedSection, term);
+  let data = await getData(subject, course, section, convertedSection, term); //Calls API
 
-  message.channel.send(`**TERM** : ${data.term}\n**PROFESSOR** : ${data.prof}\n**COURSE NAME** : ${data.subject} ${data.course}.${data.section}`);
+  message.channel.send(`**TERM** : ${data.term}\n**PROFESSOR** : ${data.prof}\n**COURSE NAME** : ${data.subject} ${data.course}.${data.section}`); //Sends course stats
 
-  let gradeData = getGrades(data.grades);
-  return message.channel.send(gradeData);
+  let gradeData = getGrades(data.grades); //Gets grades for course
+  return message.channel.send(gradeData); //Sends grades
 
   async function getData(subject, course, section, convertedSection, term) {
+    //API Calling
     let { body } = await superagent.get(`https://utdgrades.com/static/complete.json`).on("error", err => {
       return message.channel.send("**Whoops**, Error retrieving grades! Try again. If the problem still continues report the issue [here](https://github.com/KannaDev/UTDsearch/issues) command or type `@.kanna#9908` and explain your issue.");
     });
 
-    let courseData = await findCourse(body, subject, course, section, convertedSection, term);
+    let courseData = await findCourse(body, subject, course, section, convertedSection, term); //Searches the API for the required course
+
     if (typeof courseData == 'undefined') {
       return message.channel.send("Check your syntax! Make sure you follow the example. `!utd math 2413.004 fall`");
     }
@@ -70,25 +78,30 @@ module.exports.run = async (bot, message, args) => {
   }
 
   function getGrades(grades) {
-    let letterGrade = Object.keys(grades);
-    let scoreGrade = Object.values(grades);
+    let letterGrade = Object.keys(grades); //A+, A, A-, B+, B, .....
+    let scoreGrade = Object.values(grades); //44, 10, 9, 14, 8, ....
     let grade = [];
+
     for (let i = 0; i < Object.keys(grades).length; i++) {
-      grade.push(`**${letterGrade[i]}** : ${scoreGrade[i]}`);
+      grade.push(`**${letterGrade[i]}** : ${scoreGrade[i]}`); //Gets grades and adds to array
     }
     return grade;
   }
 
   async function findCourse(body, subject, course, section, convertedSection, term) {
     for (let i = body.length - 1; i >= 0; i--) {
+      //Checks for correct term
       if (body[i].term.includes(term)) {
+        //Checks for correct subject
         if (body[i].subj == subject) {
+          //Checks for correct course number
           if (body[i].num == course) {
+            //Checks for correct section number
             if (body[i].sect == section) {
-              return body[i];
+              return body[i]; //Send found course
             }
             else if (body[i].sect == convertedSection) {
-              return body[i];
+              return body[i]; //Send found course
             }
           }
         }
@@ -97,7 +110,7 @@ module.exports.run = async (bot, message, args) => {
   }
 
   function sectionConvert(num) {
-    return num.replace(/^0*(.*)$/, "$1");
+    return num.replace(/^0*(.*)$/, "$1"); //Replaces 0's before numbers. EX: 040 --> 40 or 004 --> 4
   }
 };
 
