@@ -6,10 +6,9 @@ module.exports.run = async (bot, message, args) => {
   let subject = args[0].toUpperCase();
 
   let courseWithSection = args[1];
-  courseWithSection.split(".");
+  courseWithSection = courseWithSection.split(".");
 
   let course = courseWithSection[0];
-
   let section = courseWithSection[1];
   let convertedSection = sectionConvert(section);
 
@@ -18,7 +17,8 @@ module.exports.run = async (bot, message, args) => {
   else if (term.charAt(0) == "s") term = term.replace("s", "S");
 
   let data = await getData(subject, course, section, convertedSection, term);
-  let gradeData = await getGrades(data.grades);
+  message.channel.send(`**TERM** : ${data.term}\n**PROFESSOR** : ${data.prof}\n**COURSE NAME** : ${data.subject} ${data.course}.${data.section}`);
+  let gradeData = getGrades(data.grades);
 
   async function getData(subject, course, section, convertedSection, term) {
     let { body } = await superagent.get(`https://utdgrades.com/static/complete.json`).on("error", err => {
@@ -31,6 +31,7 @@ module.exports.run = async (bot, message, args) => {
     let officialSubject = courseData.subj;
     let officialCourse = courseData.num;
     let officialSection = courseData.sect;
+    let officialProf = courseData.prof;
     let grades = courseData.grades;
 
     return {
@@ -38,16 +39,21 @@ module.exports.run = async (bot, message, args) => {
       subject: officialSubject,
       course: officialCourse,
       section: officialSection,
+      prof: officialProf,
       grades: grades
     };
   }
 
-  async function getGrades(grades) {
-    //LOGIC FOR GETTING GRADES?
+  function getGrades(grades) {
+    let letterGrade = Object.keys(grades);
+    let scoreGrade = Object.values(grades);
+    for (let i = 0; i < Object.keys(grades).length; i++) {
+      message.channel.send(`**${letterGrade[i]}** : ${scoreGrade[i]}`);
+    }
   }
 
   async function findCourse(body, subject, course, section, convertedSection, term) {
-    for (let i = body.length - 1; i >= 0; i++) {
+    for (let i = body.length - 1; i >= 0; i--) {
       if (body[i].term.includes(term)) {
         if (body[i].subj == subject) {
           if (body[i].num == course) {
