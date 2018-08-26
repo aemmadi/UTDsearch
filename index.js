@@ -17,7 +17,30 @@ fileSys.readdir("./commands/", (err, files) => {
   jsFile.forEach((f, i) => {
     let props = require(`./commands/${f}`);
     console.log(`${f} loaded!`);
-    bot.commands.set(props.help.name, props);
+    bot.commands.set(props.help.ap, props);
+    bot.commands.set(props.help.arab, props);
+    bot.commands.set(props.help.arts, props);
+    bot.commands.set(props.help.chin, props);
+    bot.commands.set(props.help.crwt, props);
+    bot.commands.set(props.help.danc, props);
+    bot.commands.set(props.help.film, props);
+    bot.commands.set(props.help.fren, props);
+    bot.commands.set(props.help.germ, props);
+    bot.commands.set(props.help.hist, props);
+    bot.commands.set(props.help.huma, props);
+    bot.commands.set(props.help.lit, props);
+    bot.commands.set(props.help.phil, props);
+    bot.commands.set(props.help.rhet, props);
+    bot.commands.set(props.help.span, props);
+    bot.commands.set(props.help.musi, props);
+    bot.commands.set(props.help.japn, props);
+    bot.commands.set(props.help.ahst, props);
+    bot.commands.set(props.help.rhet, props);
+    bot.commands.set(props.help.lol, props);
+    bot.commands.set(props.help.cs, props);
+    bot.commands.set(props.help.cs, props);
+    bot.commands.set(props.help.cs, props);
+    bot.commands.set(props.help.cs, props);
   });
 });
 
@@ -38,14 +61,14 @@ bot.on("message", async message => {
   let prefix = config.prefix;
   let msgarray = message.content.split(" "); //Splits the msg everytime there is a space
   let cmd = msgarray[0]; //Assigns the first word in msg to cmd variable. Ex: "!play"
-  let args = msgarray.slice(1); //Cuts off the cmd part of the msg and assigns the rest to args variable
+  let args = msgarray.slice(0); //Cuts off the cmd part of the msg and assigns the rest to args variable
 
   if (cmd.charAt(0) == prefix) {
     let commandFile = bot.commands.get(cmd.slice(prefix.length));
     if (commandFile) commandFile.run(bot, message, args); //Run commands
   }
 });
-bot.login(config.token);
+bot.login(config.devToken);
 
 function status_change(status) {
   setInterval(function () {

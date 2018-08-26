@@ -1,13 +1,13 @@
 const Discord = require("discord.js");
 const superagent = require("superagent");
 
-// !utd math 2413.004 fall/spring
+// !math 2413.004 fall/spring
 module.exports.run = async (bot, message, args) => {
   //Checks if subject is provided
   if (!args[0])
     return message.channel.send("Specify a subject!\n`!utd <subject> [course] {fall/spring}`\nFor Example: `!utd math 2413.004 fall`");
 
-  let subject = args[0].toUpperCase(); //uppercases the subject for API. math --> MATH
+  let subject = args[0].slice(1).toUpperCase(); //uppercases the subject for API. math --> MATH
 
   //Checks if course is provided
   if (!args[1])
@@ -40,6 +40,11 @@ module.exports.run = async (bot, message, args) => {
     return message.channel.send("Specify a valid term! Check Example.\n`!utd <subject> [course] {fall/spring}`\nFor Example: `!utd math 2413.004 fall`");
   }
 
+  // console.log(subject)
+  // console.log(course)
+  // console.log(section)
+  // console.log(convertedSection)
+  // console.log(term)
   let data = await getData(subject, course, section, convertedSection, term); //Calls API
 
   message.channel.send(`**TERM** : ${data.term}\n**PROFESSOR** : ${data.prof}\n**COURSE NAME** : ${data.subject} ${data.course}.${data.section}`); //Sends course stats
@@ -115,5 +120,6 @@ module.exports.run = async (bot, message, args) => {
 };
 
 module.exports.help = {
-  name: "utd"
+  math: "math",
+  cs: "cs"
 };
