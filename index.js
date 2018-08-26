@@ -17,30 +17,9 @@ fileSys.readdir("./commands/", (err, files) => {
   jsFile.forEach((f, i) => {
     let props = require(`./commands/${f}`);
     console.log(`${f} loaded!`);
-    bot.commands.set(props.help.ap, props);
-    bot.commands.set(props.help.arab, props);
-    bot.commands.set(props.help.arts, props);
-    bot.commands.set(props.help.chin, props);
-    bot.commands.set(props.help.crwt, props);
-    bot.commands.set(props.help.danc, props);
-    bot.commands.set(props.help.film, props);
-    bot.commands.set(props.help.fren, props);
-    bot.commands.set(props.help.germ, props);
-    bot.commands.set(props.help.hist, props);
-    bot.commands.set(props.help.huma, props);
-    bot.commands.set(props.help.lit, props);
-    bot.commands.set(props.help.phil, props);
-    bot.commands.set(props.help.rhet, props);
-    bot.commands.set(props.help.span, props);
-    bot.commands.set(props.help.musi, props);
-    bot.commands.set(props.help.japn, props);
-    bot.commands.set(props.help.ahst, props);
-    bot.commands.set(props.help.rhet, props);
-    bot.commands.set(props.help.lol, props);
-    bot.commands.set(props.help.cs, props);
-    bot.commands.set(props.help.cs, props);
-    bot.commands.set(props.help.cs, props);
-    bot.commands.set(props.help.cs, props);
+    for (let i = 0; i < 112; i++) {
+      bot.commands.set(props.help.subject[i], props);
+    }
   });
 });
 
@@ -68,7 +47,7 @@ bot.on("message", async message => {
     if (commandFile) commandFile.run(bot, message, args); //Run commands
   }
 });
-bot.login(config.devToken);
+bot.login(config.token);
 
 function status_change(status) {
   setInterval(function () {
