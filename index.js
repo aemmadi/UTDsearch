@@ -17,7 +17,9 @@ fileSys.readdir("./commands/", (err, files) => {
   jsFile.forEach((f, i) => {
     let props = require(`./commands/${f}`);
     console.log(`${f} loaded!`);
-    bot.commands.set(props.help.name, props);
+    for (let i = 0; i < 112; i++) {
+      bot.commands.set(props.help.subject[i], props);
+    }
   });
 });
 
@@ -38,7 +40,7 @@ bot.on("message", async message => {
   let prefix = config.prefix;
   let msgarray = message.content.split(" "); //Splits the msg everytime there is a space
   let cmd = msgarray[0]; //Assigns the first word in msg to cmd variable. Ex: "!play"
-  let args = msgarray.slice(1); //Cuts off the cmd part of the msg and assigns the rest to args variable
+  let args = msgarray.slice(0); //Cuts off the cmd part of the msg and assigns the rest to args variable
 
   if (cmd.charAt(0) == prefix) {
     let commandFile = bot.commands.get(cmd.slice(prefix.length));

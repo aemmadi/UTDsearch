@@ -1,21 +1,21 @@
 const Discord = require("discord.js");
 const superagent = require("superagent");
 
-// !utd math 2413.004 fall/spring
+// !math 2413.004 fall/spring
 module.exports.run = async (bot, message, args) => {
   //Checks if subject is provided
   if (!args[0])
-    return message.channel.send("Specify a subject!\n`!utd <subject> [course] {fall/spring}`\nFor Example: `!utd math 2413.004 fall`");
+    return message.channel.send("Specify a subject!\n`!<subject> [course] {fall/spring}`\nFor Example: `!math 2413.004 fall`");
 
-  let subject = args[0].toUpperCase(); //uppercases the subject for API. math --> MATH
+  let subject = args[0].slice(1).toUpperCase(); //uppercases the subject for API. math --> MATH
 
   //Checks if course is provided
   if (!args[1])
-    return message.channel.send("Specify a course!\n`!utd <subject> [course] {fall/spring}`\nFor Example: `!utd math 2413.004 fall`");
+    return message.channel.send("Specify a course!\n`!<subject> [course] {fall/spring}`\nFor Example: `!math 2413.004 fall`");
 
   //Checks id section is provided
   if (!args[1].includes("."))
-    return message.channel.send("Specify course in correct format! Check Example.\n`!utd <subject> [course] {fall/spring}`\nFor Example: `!utd math 2413.004 fall`");
+    return message.channel.send("Specify course in correct format! Check Example.\n`!<subject> [course] {fall/spring}`\nFor Example: `!math 2413.004 fall`");
 
   let courseWithSection = args[1];
   courseWithSection = courseWithSection.split("."); //Splits course number and section
@@ -27,7 +27,7 @@ module.exports.run = async (bot, message, args) => {
 
   //Checks if term is provided
   if (!args[2])
-    return message.channel.send("Specify a term!\n`!utd <subject> [course] {fall/spring}`\nFor Example: `!utd math 2413.004 fall`");
+    return message.channel.send("Specify a term!\n`!<subject> [course] {fall/spring}`\nFor Example: `!math 2413.004 fall`");
 
   let term = args[2]; //Term
 
@@ -37,9 +37,14 @@ module.exports.run = async (bot, message, args) => {
     else if (term.charAt(0) == "s") term = term.replace("s", "S");
   }
   else {
-    return message.channel.send("Specify a valid term! Check Example.\n`!utd <subject> [course] {fall/spring}`\nFor Example: `!utd math 2413.004 fall`");
+    return message.channel.send("Specify a valid term! Check Example.\n`!<subject> [course] {fall/spring}`\nFor Example: `!math 2413.004 fall`");
   }
 
+  // console.log(subject)
+  // console.log(course)
+  // console.log(section)
+  // console.log(convertedSection)
+  // console.log(term)
   let data = await getData(subject, course, section, convertedSection, term); //Calls API
 
   message.channel.send(`**TERM** : ${data.term}\n**PROFESSOR** : ${data.prof}\n**COURSE NAME** : ${data.subject} ${data.course}.${data.section}`); //Sends course stats
@@ -56,7 +61,7 @@ module.exports.run = async (bot, message, args) => {
     let courseData = await findCourse(body, subject, course, section, convertedSection, term); //Searches the API for the required course
 
     if (typeof courseData == 'undefined') {
-      return message.channel.send("Check your syntax! Make sure you follow the example. `!utd math 2413.004 fall`");
+      return message.channel.send("Check your syntax! Make sure you follow the example. `!math 2413.004 fall`");
     }
     else {
       let officialTerm = courseData.term;
@@ -115,5 +120,116 @@ module.exports.run = async (bot, message, args) => {
 };
 
 module.exports.help = {
-  name: "utd"
+  subject: ['ap',
+    'arab',
+    'arts',
+    'chin',
+    'crwt',
+    'danc',
+    'film',
+    'fren',
+    'germ',
+    'hist',
+    'huma',
+    'lit',
+    'phil',
+    'rhet',
+    'span',
+    'musi',
+    'japn',
+    'ahst',
+    'huhi',
+    'comm',
+    'husl',
+    'huas',
+    'arhm',
+    'cldp',
+    'nsc',
+    'psy',
+    'spau',
+    'acn',
+    'aud',
+    'comd',
+    'hcs',
+    'hdcd',
+    'psyc',
+    'cgs',
+    'msen',
+    'ee',
+    'ce',
+    'eeop',
+    'eerf',
+    'eegr',
+    'eemf',
+    'eesc',
+    'eect',
+    'engr',
+    'cs',
+    'se',
+    'ecs',
+    'mech',
+    'eedg',
+    'eepe',
+    'bmen',
+    'eecs',
+    'te',
+    'sysm',
+    'ecsc',
+    'crim',
+    'econ',
+    'pa',
+    'geog',
+    'soc',
+    'gisc',
+    'psci',
+    'epps',
+    'govt',
+    'ipec',
+    'envr',
+    'pppe',
+    'ams',
+    'bis',
+    'ed',
+    'gst',
+    'hlth',
+    'phin',
+    'isis',
+    'mais',
+    'hons',
+    'mis',
+    'bps',
+    'entp',
+    'fin',
+    'hmgt',
+    'meco',
+    'mkt',
+    'ob',
+    'opre',
+    'ims',
+    'acct',
+    'blaw',
+    'obhr',
+    'real',
+    'bcom',
+    'mas',
+    'itss',
+    'rmis',
+    'buan',
+    'engy',
+    'chem',
+    'biol',
+    'geos',
+    'math',
+    'stat',
+    'phys',
+    'nats',
+    'sci',
+    'smed',
+    'acts',
+    'isns',
+    'univ',
+    'ba',
+    'thea',
+    'atcm',
+    'mthe']
 };
