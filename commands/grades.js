@@ -47,6 +47,9 @@ module.exports.run = async (bot, message, args) => {
   // console.log(term)
   let data = await getData(subject, course, section, convertedSection, term); //Calls API
 
+  if ((data.term == undefined) || (data.prof == undefined) || (data.subject == undefined) || (data.course == undefined) || (data.section == undefined))
+    return message.channel.send("Unknown Error Occurred. Re-check if the class exists in the term. If this issue keeps occurring please report it at https://github.com/KannaDev/UTDsearch/issues");
+
   message.channel.send(`**TERM** : ${data.term}\n**PROFESSOR** : ${data.prof}\n**COURSE NAME** : ${data.subject} ${data.course}.${data.section}`); //Sends course stats
 
   let gradeData = getGrades(data.grades); //Gets grades for course
@@ -55,7 +58,7 @@ module.exports.run = async (bot, message, args) => {
   async function getData(subject, course, section, convertedSection, term) {
     //API Calling
     let { body } = await superagent.get(`https://utdgrades.com/static/complete.json`).on("error", err => {
-      return message.channel.send("**Whoops**, Error retrieving grades! Try again. If the problem still continues report the issue [here](https://github.com/KannaDev/UTDsearch/issues).");
+      return message.channel.send("**Whoops**, Error retrieving grades! Try again. If the problem still continues report the issue at https://github.com/KannaDev/UTDsearch/issues");
     });
 
     let courseData = await findCourse(body, subject, course, section, convertedSection, term); //Searches the API for the required course

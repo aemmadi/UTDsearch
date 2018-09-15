@@ -55,3 +55,4 @@ function status_change(status) {
     bot.user.setActivity(`${chosen}`, { type: "Watching" });
   }, 10000);
 }
+
