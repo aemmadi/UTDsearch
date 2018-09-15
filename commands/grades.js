@@ -5,17 +5,17 @@ const superagent = require("superagent");
 module.exports.run = async (bot, message, args) => {
   //Checks if subject is provided
   if (!args[0])
-    return message.channel.send("Specify a subject!\n`!<subject> [course] {fall/spring}`\nFor Example: `!math 2413.004 fall`");
+    return message.channel.send("Specify a subject!\n`!<subject> [course] {fall/spring/summer}`\nFor Example: `!math 2413.004 fall`");
 
   let subject = args[0].slice(1).toUpperCase(); //uppercases the subject for API. math --> MATH
 
   //Checks if course is provided
   if (!args[1])
-    return message.channel.send("Specify a course!\n`!<subject> [course] {fall/spring}`\nFor Example: `!math 2413.004 fall`");
+    return message.channel.send("Specify a course!\n`!<subject> [course] {fall/spring/summer}`\nFor Example: `!math 2413.004 fall`");
 
   //Checks id section is provided
   if (!args[1].includes("."))
-    return message.channel.send("Specify course in correct format! Check Example.\n`!<subject> [course] {fall/spring}`\nFor Example: `!math 2413.004 fall`");
+    return message.channel.send("Specify course in correct format! Check Example.\n`!<subject> [course] {fall/spring/summer}`\nFor Example: `!math 2413.004 fall`");
 
   let courseWithSection = args[1];
   courseWithSection = courseWithSection.split("."); //Splits course number and section
@@ -27,17 +27,17 @@ module.exports.run = async (bot, message, args) => {
 
   //Checks if term is provided
   if (!args[2])
-    return message.channel.send("Specify a term!\n`!<subject> [course] {fall/spring}`\nFor Example: `!math 2413.004 fall`");
+    return message.channel.send("Specify a term!\n`!<subject> [course] {fall/spring/summer}`\nFor Example: `!math 2413.004 fall`");
 
-  let term = args[2]; //Term
+  let term = args[2].toLowerCase(); //Term
 
   //Capitalizes the first letter in the term for API
-  if (term.includes("fall") || term.includes("spring")) {
+  if (term.includes("fall") || term.includes("spring") || term.includes("summer")) {
     if (term.charAt(0) == "f") term = term.replace("f", "F");
     else if (term.charAt(0) == "s") term = term.replace("s", "S");
   }
   else {
-    return message.channel.send("Specify a valid term! Check Example.\n`!<subject> [course] {fall/spring}`\nFor Example: `!math 2413.004 fall`");
+    return message.channel.send("Specify a valid term! Check Example.\n`!<subject> [course] {fall/spring/summer}`\nFor Example: `!math 2413.004 fall`");
   }
 
   // console.log(subject)
@@ -55,7 +55,7 @@ module.exports.run = async (bot, message, args) => {
   async function getData(subject, course, section, convertedSection, term) {
     //API Calling
     let { body } = await superagent.get(`https://utdgrades.com/static/complete.json`).on("error", err => {
-      return message.channel.send("**Whoops**, Error retrieving grades! Try again. If the problem still continues report the issue [here](https://github.com/KannaDev/UTDsearch/issues) command or type `@.kanna#9908` and explain your issue.");
+      return message.channel.send("**Whoops**, Error retrieving grades! Try again. If the problem still continues report the issue [here](https://github.com/KannaDev/UTDsearch/issues).");
     });
 
     let courseData = await findCourse(body, subject, course, section, convertedSection, term); //Searches the API for the required course
