@@ -9,13 +9,13 @@ A discord bot for displaying UTD grade distributions.
 
 **Examples**: 
 
-!math 2413.004 fall
+`!math 2413.004 fall`
 
-!cs 1336.010 spring
+`!cs 1336.010 spring`
 
-!phys 2126.123 fall
+`!phys 2126.123 fall`
 
-!rhet 1302.091 summer
+`!rhet 1302.091 summer`
 
 ## Open to any suggestions, just open an issue.
 
